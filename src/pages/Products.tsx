@@ -251,7 +251,7 @@ export default function Products() {
                   {p.code && <p className="text-xs text-muted-foreground">Code: {p.code}</p>}
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="grid grid-cols-3 gap-2 text-sm">
                   <div className="bg-muted/50 rounded-lg p-2 text-center">
                     <p className="text-xs text-muted-foreground">Normal</p>
                     <p className="font-bold text-foreground">₹{p.normalPrice}</p>
@@ -259,6 +259,10 @@ export default function Products() {
                   <div className="bg-muted/50 rounded-lg p-2 text-center">
                     <p className="text-xs text-muted-foreground">Retailer</p>
                     <p className="font-bold text-primary">₹{p.retailerPrice}</p>
+                  </div>
+                  <div className="bg-muted/50 rounded-lg p-2 text-center">
+                    <p className="text-xs text-muted-foreground">Buying</p>
+                    <p className="font-bold text-warning">₹{p.buyingPrice}</p>
                   </div>
                 </div>
 
