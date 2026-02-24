@@ -14,7 +14,6 @@ export default function LoginPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("user"); // ✅ NEW STATE
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
@@ -78,7 +77,6 @@ export default function LoginPage() {
         name,
         email,
         password,
-        role, // ✅ SEND ROLE
       });
 
       const userData = {
@@ -179,21 +177,6 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
-
-            {/* ✅ NEW ROLE FIELD (ONLY REGISTER MODE) */}
-            {isRegister && (
-              <div className="space-y-2">
-                <Label>Account Type</Label>
-                <select
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  className="w-full border rounded px-3 py-2 bg-background"
-                >
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
-            )}
 
             {error && (
               <p className="text-sm text-destructive bg-destructive/10 px-3 py-2 rounded">
