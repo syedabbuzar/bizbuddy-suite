@@ -328,7 +328,7 @@ export default function Billing() {
                           </div>
                         </div>
                       </button>
-                    ))}
+                    ))}                
                   </div>
                 )}
                 {showDropdown && productSearch.trim() && filteredProducts.length === 0 && (
