@@ -79,26 +79,35 @@ export default function Billing() {
       )
     : [];
 
+  const [selectedProduct, setSelectedProduct] = useState<ApiProduct | null>(null);
+
   const selectProduct = (product: ApiProduct) => {
-    const price = customerType === 'retailer' ? product.retailerPrice : product.normalPrice;
-    const existing = items.find(i => i.productId === product._id);
+    setSelectedProduct(product);
+    setProductSearch(product.name);
+    setShowDropdown(false);
+  };
+
+  const addSelectedProduct = () => {
+    if (!selectedProduct || itemQty <= 0) return;
+    const price = customerType === 'retailer' ? selectedProduct.retailerPrice : selectedProduct.normalPrice;
+    const existing = items.find(i => i.productId === selectedProduct._id);
     if (existing) {
       setItems(items.map(i =>
-        i.productId === product._id
+        i.productId === selectedProduct._id
           ? { ...i, quantity: i.quantity + itemQty, total: (i.quantity + itemQty) * i.price }
           : i
       ));
     } else {
       setItems([...items, {
-        productId: product._id,
-        productName: product.name,
+        productId: selectedProduct._id,
+        productName: selectedProduct.name,
         quantity: itemQty,
         price,
         total: price * itemQty,
       }]);
     }
     setProductSearch('');
-    setShowDropdown(false);
+    setSelectedProduct(null);
     setItemQty(1);
   };
 
@@ -123,9 +132,7 @@ export default function Billing() {
   const total = subtotal - discountAmount;
 
   const buildBillText = (bill: any) => {
-    let text = `🧾 *${shopInfo.name}*\n`;
-    text += `📍 ${shopInfo.address}\n`;
-    text += `📞 ${shopInfo.contact}\n`;
+    let text = `🧾 *Bill*\n`;
     text += `━━━━━━━━━━━━━━━━━━\n`;
     text += `👤 Customer: *${bill.customerName}*\n`;
     text += `📅 Date: ${bill.date}\n`;
@@ -262,7 +269,7 @@ export default function Billing() {
           <div className="glass-card p-3 sm:p-4 space-y-3 sm:space-y-4 animate-slide-up" style={{ animationDelay: '100ms' }}>
             <h3 className="font-display font-semibold text-sm sm:text-base">Add Items</h3>
             <p className="text-xs text-muted-foreground italic">Search by product name or code. Price auto-sets based on customer type.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
               <div className="sm:col-span-3 space-y-1" ref={searchRef} style={{ position: 'relative', zIndex: 100 }}>
                 <Label className="text-xs">Product Name / Code</Label>
                 <div className="relative">
@@ -313,6 +320,11 @@ export default function Billing() {
               <div className="space-y-1">
                 <Label className="text-xs">Qty</Label>
                 <Input type="number" min={1} value={itemQty} onChange={e => setItemQty(+e.target.value)} placeholder="1" className="input-focus" />
+              </div>
+              <div className="flex items-end">
+                <Button type="button" onClick={addSelectedProduct} disabled={!selectedProduct || itemQty <= 0} className="gradient-primary text-primary-foreground hover-glow gap-1 w-full">
+                  <Plus size={14} /> Add
+                </Button>
               </div>
             </div>
           </div>
@@ -381,9 +393,7 @@ export default function Billing() {
           {lastBill && (
             <div className="space-y-4" id="bill-content">
               <div className="text-center border-b border-border pb-3">
-                <h2 className="font-display text-xl font-bold text-primary">{shopInfo.name}</h2>
-                <p className="text-xs text-muted-foreground">{shopInfo.address}</p>
-                <p className="text-xs text-muted-foreground">{shopInfo.contact}</p>
+                <h2 className="font-display text-xl font-bold text-primary">Bill</h2>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Customer: <strong>{lastBill.customerName}</strong> ({lastBill.customerType})</span>

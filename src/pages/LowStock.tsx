@@ -96,13 +96,19 @@ export default function LowStock() {
     e.preventDefault();
     if (restockQty <= 0) return;
     try {
+      // Ensure token is set before making the request
+      const token = localStorage.getItem('st_token');
+      if (token) {
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      }
       const res = await api.put(`/low-stock/${restockId}`, { qty: restockQty });
       if (res.data?.success) {
         toast({ title: 'Stock Updated!', description: `Added ${restockQty} units.` });
         fetchLowStock();
       }
-    } catch {
-      toast({ title: 'Error updating stock', variant: 'destructive' });
+    } catch (err: any) {
+      const msg = err.response?.data?.message || 'Error updating stock';
+      toast({ title: msg, variant: 'destructive' });
     }
     setRestockOpen(false);
   };
