@@ -53,7 +53,7 @@ export default function LowStock() {
           // Fallback: fetch all products and filter stock <= 10
           return api.get('/products').then(res2 => {
             const all = Array.isArray(res2.data) ? res2.data : [];
-            const low = all.filter((p: any) => p.stock <= 10).map((p: any) => ({
+            const low = all.filter((p: any) => p.stock <= 50).map((p: any) => ({
               _id: p._id,
               id: p._id,
               name: p.name,
@@ -155,7 +155,7 @@ export default function LowStock() {
         <div className="glass-card p-12 text-center animate-slide-up">
           <Package size={48} className="mx-auto text-success mb-4" />
           <h3 className="font-display text-xl font-semibold">All Stocked Up!</h3>
-          <p className="text-muted-foreground mt-1">No products with stock ≤ 10 currently.</p>
+          <p className="text-muted-foreground mt-1">No products with stock ≤ 50 currently.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
